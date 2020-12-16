@@ -6,6 +6,7 @@
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>API Reference</title>
+    <link href="images/favicon-c6a1c2d1.ico" rel="icon" type="image/ico" />
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -279,7 +280,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-c9d8fa83.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-46da2a2d.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-e033bdd3.js"></script>
 
@@ -307,12 +308,174 @@
         </div>
         <ul class="search-results"></ul>
       <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#change-log" class="toc-h1 toc-link" data-title="Change Log">Change Log</a>
+          </li>
+          <li>
+            <a href="#general-info" class="toc-h1 toc-link" data-title="General Info">General Info</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#general-api-information" class="toc-h2 toc-link" data-title="General API Information">General API Information</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#currency" class="toc-h1 toc-link" data-title="Currency">Currency</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-available-currencies" class="toc-h2 toc-link" data-title="Get Available Currencies">Get Available Currencies</a>
+                  </li>
+                  <li>
+                    <a href="#get-specific-currency" class="toc-h2 toc-link" data-title="Get specific currency">Get specific currency</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        
+        <h1 id='change-log'>Change Log</h1>
+
+<p><strong>2020-12-10</strong></p>
+
+<p><h1 id='general-info'>General Info</h1><h2 id='general-api-information'>General API Information</h2>
+<ul>
+<li>The base endpoint is: https://publicapi.synchrobit.io</li>
+<li>All endpoints return either a JSON object or array.</li>
+<li>Data is returned in ascending order. Oldest first, newest last.</li>
+<li>All time and timestamp related fields are in milliseconds.</li>
+<li>HTTP <code>4XX</code> return codes are used for for malformed requests; the issue is on the sender&#39;s side.</li>
+<li>HTTP <code>429</code> return code is used when breaking a request rate limit.</li>
+<li>HTTP <code>418</code> return code is used when an IP has been auto-banned for continuing to send requests after receiving 429 codes.</li>
+<li>HTTP <code>5XX</code> return codes are used for internal errors; the issue is on Binance&#39;s side. It is important to <strong>NOT</strong> treat this as a failure operation; the execution status is <strong>UNKNOWN</strong> and could have been a success.</li>
+<li>Any endpoint can return an ERROR.</li>
+<li>For <code>GET</code> endpoints, parameters must be sent as a query string.</li>
+<li>For <code>POST</code>, <code>PUT</code>, and <code>DELETE</code> endpoints, the parameters may be sent as <code>a query string</code> or in the <code>request body</code> with content type <code>application/x-www-form-urlencoded</code>. You may mix parameters between both the query string and request body if you wish to do so.</li>
+<li>Parameters may be sent in any order.</li>
+<li>If a parameter sent in both the query string and request body, the query string parameter will be used.</li>
+</ul></p>
+
+<p><h1 id='currency'>Currency</h1><h2 id='get-available-currencies'>Get Available Currencies</h2>
+<p>Gets all currencies available on the exchange.</p>
+
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getallcurrency&quot;</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span></p>
+
+<p><span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getallcurrency&quot;</span></p>
+
+<p><span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span></p>
+
+<p><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></p>
+
+<p><span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">&#39;</span><span class="s1">request</span><span class="dl">&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">&#39;</span><span class="s1">method</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">GET</span><span class="dl">&#39;</span><span class="p">,</span>
+  <span class="dl">&#39;</span><span class="s1">url</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getallcurrency</span><span class="dl">&#39;</span><span class="p">,</span>
+  <span class="dl">&#39;</span><span class="s1">headers</span><span class="dl">&#39;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+
+<p><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">&quot;contentType&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">&quot;serializerSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">&quot;statusCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4374f76d-3f3d-4c69-989b-1705fcd1863f&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;tokenName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tether&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;erc20&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;currentPrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;initialValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;coinTokenSymbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDT&quot;</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9618b683-ce09-4086-92b7-1e297bf932ab&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;tokenName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BinanceCoin&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;currentPrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">29.29000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;initialValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;coinTokenSymbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BNB&quot;</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;756bd19b-ba3e-4a9b-a588-25625563c7ce&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;tokenName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Synthetix Network Token&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ERC20&quot;</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;currentPrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.16200000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;initialValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.16200000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">&quot;coinTokenSymbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SNX&quot;</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Get</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getallcurrency</td>
+</tr>
+</tbody></table>
+<h3 id='headers'>Headers</h3>
+<p>No Headers Required</p>
+<h3 id='input-schema-for-request'>Input Schema for Request</h3>
+<p>No Input Schema</p>
+<h3 id='output-schema-of-request'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>Id of the currency</td>
+</tr>
+<tr>
+<td>tokenName</td>
+<td>Name of the Token</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Type of Currency Code</td>
+</tr>
+<tr>
+<td>currentPrice</td>
+<td>Current Price of the currency</td>
+</tr>
+<tr>
+<td>initialValue</td>
+<td>Initial value of the currency</td>
+</tr>
+<tr>
+<td>coinTokenSymbol</td>
+<td>Name of the Token Symbol</td>
+</tr>
+</tbody></table>
+<h2 id='get-specific-currency'>Get specific currency</h2></p></p>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
