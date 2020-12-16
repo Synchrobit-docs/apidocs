@@ -1,0 +1,102 @@
+# Currency
+
+## Get Available Currencies
+
+Gets all currencies available on the exchange.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getallcurrency");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getallcurrency"
+
+payload={}
+headers = {}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getallcurrency',
+  'headers': {
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "id": "4374f76d-3f3d-4c69-989b-1705fcd1863f",
+            "tokenName": "Tether",
+            "type": "erc20",
+            "currentPrice": 1.00000000000,
+            "initialValue": 1.00000000000,
+            "coinTokenSymbol": "USDT"
+        },
+        {
+            "id": "9618b683-ce09-4086-92b7-1e297bf932ab",
+            "tokenName": "BinanceCoin",
+            "type": "",
+            "currentPrice": 29.29000000000,
+            "initialValue": 1.00000000000,
+            "coinTokenSymbol": "BNB"
+        },
+        {
+            "id": "756bd19b-ba3e-4a9b-a588-25625563c7ce",
+            "tokenName": "Synthetix Network Token",
+            "type": "ERC20",
+            "currentPrice": 5.16200000000,
+            "initialValue": 5.16200000000,
+            "coinTokenSymbol": "SNX"
+        }
+      ]
+    }
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getallcurrency|
+
+
+### Headers
+No Headers Required
+
+### Input Schema for Request
+No Input Schema
+
+### Output Schema of Request
+|Field|Meaning|
+|-----------|---------|
+|id| Id of the currency|
+|tokenName|Name of the Token|
+|type|Type of Currency Code |
+|currentPrice| Current Price of the currency |
+|initialValue| Initial value of the currency |
+|coinTokenSymbol| Name of the Token Symbol  |
+
+## Get specific currency
+
+
