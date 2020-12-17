@@ -72,15 +72,179 @@ No Headers Required
 No Input Schema
 
 ### Output Schema of Request
-|Field|Meaning|
-|-----------|---------|
-|id| Id of the currency|
-|tokenName|Name of the Token|
-|type|Type of Currency Code |
-|currentPrice| Current Price of the currency |
-|initialValue| Initial value of the currency |
-|coinTokenSymbol| Name of the Token Symbol  |
+|Field|Type |Meaning|
+|-----------|---------|---------|
+|id|string |Id of the currency|
+|tokenName|string|Name of the Token|
+|type|string|Type of Currency Code |
+|currentPrice|decimal |Current Price of the currency |
+|initialValue| int|Initial value of the currency |
+|coinTokenSymbol|string |Name of the Token Symbol  |
+
+
+
 
 ## Get specific currency
+
+Get Specific Currency  by passing the name in the url as a parameter
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin"
+
+payload={}
+headers = {}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin',
+  'headers': {
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+            {
+                "id": "dc545925-aa9c-4bac-9c50-af362ee2f249",
+                "email": "",
+                "fullName": "",
+                "contactNumber": "",
+                "coinName": "Bitcoin",
+                "coinTokenSymbol": "BTC",
+                "coinImages": "d3f27cb6-088b-4dd8-981e-28908df06c95BTC.png,",
+                "webUrl": "www.bitcoin.com",
+                "twitterUrl": "www.bitcoin.com",
+                "bitcoinTalkUrl": "www.bitcoin.com",
+                "githubUrl": "www.bitcoin.com",
+                "algorithm": "",
+                "isMineable": true,
+                "affiliated": true,
+                "reason": "dhhdh",
+                "specialization": "dhhg",
+                "contractAddress": "hdhdhd",
+                "createdAt": "2020-01-31T07:14:20.7328703+00:00",
+                "modifyAt": "2020-01-31T18:50:00.5811438+00:00",
+                "modifyBy": "Admin",
+                "createdBy": "Admin-20180426112658489",
+                "initialValue": 6698.87000000000,
+                "tokenType": "primary",
+                "fbUrl": "www.bitcoin.com",
+                "linkedinUrl": "www.bitcoin.com",
+                "steemitUrl": "www.bitcoin.com",
+                "redditUrl": "www.bitcoin.com",
+                "mediumUrl": "www.bitcoin.com",
+                "telegramUrl": "www.bitcoin.com",
+                "instagramUrl": "www.bitcoin.com",
+                "maxSupply": "210000",
+                "proofType": "PoW",
+                "startDate": "2010-06-01T00:00:00+00:00",
+                "difficultyAdj": "50",
+                "blockRr": "2342",
+                "blockNo": "16",
+                "networkHs": "2400",
+                "currentSupply": "2342443",
+                "blockReward": "23424",
+                "description": "Bitcoin uses peer-to-peer technology to operate with no central authority or banks; managing transactions and the issuing of bitcoins is carried out collectively by the network. Although other cryptocurrencies have come before, Bitcoin is the first decentralized cryptocurrency - Its reputation has spawned copies and evolution in the space.\r\n\r\nWith the largest variety of markets and the biggest value - having reached a peak of 18 billion USD - Bitcoin is here to stay. As with any new invention, there can be improvements or flaws in the initial model however the community and a team of dedicated developers are pushing to overcome any obstacle they come across. It is also the most traded cryptocurrency and one of the main entry points for all the other cryptocurrencies. The price is as unstable as always and it can go up or down by 10%-20% in a single day.\r\n\r\nBitcoin is an SHA-256 POW coin with almost 21,000,000 total minable coins. The block time is 10 minutes. See below for a full range of Bitcoin markets where you can trade US Dollars for Bitcoin, crypto to Bitcoin and many other fiat currencies too.",
+                "tokenStatus": "Enabled",
+                "currentPrice": 19831.78000000000,
+                "directVol24hr": 0.00000000000,
+                "marketCap": 0.00000000000,
+                "totalVol24hr": 0.00000000000,
+                "lastTradePrice": 0.00000000000,
+                "lastTradeTime": "0001-01-01T00:00:00+00:00",
+                "lastTradeCoin": null,
+                "allWalletStatus": true,
+                "abi": "fbcvhbbfd",
+                "minimumConfirmation": 1,
+                "decimals": 0,
+                "isIEOToken": false,
+                "isFiat": false,
+                "order": 1,
+                "coinDescription": null
+            }
+        ]
+    }
+```
+
+### Request Information
+
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin|
+
+
+### Headers
+No Headers Required
+
+### Query Parameters
+
+Parameter | Type |Example | Description
+--------- | --------|------- | -----------
+CurrencyName |string |Bitcoin | Currency Type name
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|----------|---------|
+|id|string |Id of the currency|
+|coinName| string|Name of the Coin|
+|coinTokenSymbol|string |Name of the Token  of Coin |
+|coinImages|string |Image of Coin |
+|webUrl| string |Web URL of the Coin |
+|twitterUrl| string|Twitter URL of the Coin |
+|bitcoinTalkUrl|string |Bitcoin URL of the Coin |
+|githubUrl | string|Github URL of the Coin |
+|algorithm| string|Algorithm used |
+|isMineable|bool |Able to mined|
+|affiliated| bool|Name of the Token |
+|reason| string|reason|
+|specialization|string |Specialization |
+|contractAddress|string |Contract address|
+|createdAt|DateTime  |Date of creation |
+|modifyAt|  DateTime|Date of Modifiacation|
+|modifyBy|string |User name who Modified|
+|createdBy |  string |User name who created the Coin |
+|initialValue| decimal |Initial value of the coin|
+|tokenType|string |Token type |
+|maxSupply|string |Maximum supply |
+|proofType|string |Proof of type|
+|startDate| DateTime |Start date of the coin. |
+|blockNo| string|Block No.|
+|currentSupply|string |Current Supply numbers |
+|blockReward| string |Description of the Coin Reward|
+|tokenStatus| string|Status of token|
+|currentPrice| decimal|Current Price of the Coin|
+|lastTradeTime|string |Last trade time of the coin  |
+|isIEOToken|bool |isIEToken enabled or not|
+|isFiat| bool|isFiat enabled or not|
+|order| int|Number of orders of the Coin|
 
 

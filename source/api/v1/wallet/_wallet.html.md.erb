@@ -1,0 +1,176 @@
+# Wallet
+
+## Wallet Balance
+
+Get the wallet balance by passing the wallet code as a parameter in the Query string.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP"
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": "68.99335900"
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+### Query Parameters
+
+Parameter | Type |Example | Description
+--------- | ------- |---------| -----------
+WalletCode | string | XRP,ETH,BTC etc Type name |wallet code types
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|------|---------|
+|value| decimal|Available balance of the corresponding input Wallet Code|
+
+
+
+## Get Ledger Entries
+
+Get all the Ledger Entries list.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getledgersentries");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getledgersentries"
+
+payload={}
+headers = {
+  'userkey': '1ebffec66e2b3590d8cf35c784f0137fe93ee152b68b10e709f446ebc61aaca9260159bb32d6c426ab5b03016492f989041be2692d870a1dfbf03f80d10224d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getledgersentries',
+  'headers': {
+    'userkey': ''52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "id": "Synchrobit-exchange8QjH9GZuozTNBXcwDZhiDY1Elw342VExRYtGlPx2bNaQ4qgwEwuiOSqhYChSk",
+            "txFee": 0.01528118,
+            "txHash": "790496447",
+            "walletAddress": "yQNUJwKC2fkm9jK3b429HpETmnsrU4GvMh",
+            "walletCode": "DASH",
+            "transactionDetails": "DASH send to 7954696447",
+            "debitAmount": 2.70671882,
+            "createdAt": "2020-07-21T05:21:53.7719899+00:00",
+            "status": "Completed"
+        }
+    ]
+}
+```
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+### Input Schema for Request
+No Input Schema
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|id|string |Id of ledger entries |
+|txFee|decimal |Transaction fees |
+|txHash | string|Hash Calculation transaction  |
+|walletAddress| string|Address of Wallet |
+|walletCode|string |Wallet Code Name  |
+|transactionDetails|string |Details of Transaction |
+|debitAmount|string |Debited Amount  |
+|createdAt |DateTime |Time at which  the leger was created  |
+|status| string|Status of the transaction |
+

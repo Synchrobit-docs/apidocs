@@ -1,0 +1,105 @@
+# Deposit
+
+## Generic Deposit
+
+Get all the Generic Deposit list.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/genericdeposite");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/genericdeposite"
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/genericdeposite',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "id": "Synchrobit-exchangeOGfbQAf2EY6LXnVjXCDXMioWwLw5RZnZKihDQVPvsBUBihJ2mhdaUtUG9OhQ3",
+            "txFee": 0.00000000000,
+            "txHash": "a6895f311a9d38e2d5f6f5f387a73f7cf40960b030296ee5726e7798fb8a4b82",
+            "walletAddress": "yfkmTmnsJwKC2939jKQrU4GvMhNUEb42Hp",
+            "walletCode": "DASH",
+            "transactionDetails": "DASHReceived",
+            "creditAmount": 500.00000000000,
+            "createdAt": "2020-11-09T05:00:03.0633333+00:00",
+            "status": "Completed"
+        }
+    ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/genericdeposite|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+### Query Parameters
+
+No Query Parameters
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|id|string |Id of the Generic Deposit generated after deposit |
+|txFee|decimal |txFee of the deposit |
+|txHash | string|Hash of the transaction Deposited  |
+|walletAddress| string|Wallet address of the User who deposited|
+|walletCode|string |Wallet code of the deposited  |
+|transactionDetails|string | Transaction Details of Deposit|
+|creditAmount|decimal |The amount of currency Deposited  |
+|createdAt |DateTime |The time when transaction happen |
+|status| string|Status of the transaction of Deposit |
+
+
+
+
