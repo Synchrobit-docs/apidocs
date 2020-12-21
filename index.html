@@ -317,6 +317,9 @@
                   <li>
                     <a href="#general-api-information" class="toc-h2 toc-link" data-title="General API Information">General API Information</a>
                   </li>
+                  <li>
+                    <a href="#endpoint-security-type" class="toc-h2 toc-link" data-title="Endpoint Security Type">Endpoint Security Type</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -347,7 +350,33 @@
                   <li>
                     <a href="#generic-deposit" class="toc-h2 toc-link" data-title="Generic Deposit">Generic Deposit</a>
                   </li>
+                  <li>
+                    <a href="#get-all-generic-deposit-by-wallet-code" class="toc-h2 toc-link" data-title="Get All Generic Deposit by Wallet Code">Get All Generic Deposit by Wallet Code</a>
+                  </li>
               </ul>
+          </li>
+          <li>
+            <a href="#order" class="toc-h1 toc-link" data-title="Order">Order</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#place-a-new-order" class="toc-h2 toc-link" data-title="Place a New Order">Place a New Order</a>
+                  </li>
+                  <li>
+                    <a href="#get-order-history" class="toc-h2 toc-link" data-title="Get Order History">Get Order History</a>
+                  </li>
+                  <li>
+                    <a href="#get-pending-orders" class="toc-h2 toc-link" data-title="Get Pending Orders">Get Pending Orders</a>
+                  </li>
+                  <li>
+                    <a href="#cancel-order" class="toc-h2 toc-link" data-title="Cancel Order">Cancel Order</a>
+                  </li>
+                  <li>
+                    <a href="#get-order-history-by-order-action" class="toc-h2 toc-link" data-title="Get Order History by Order Action">Get Order History by Order Action</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#error-codes" class="toc-h1 toc-link" data-title="Error Codes">Error Codes</a>
           </li>
       </ul>
     </div>
@@ -358,7 +387,7 @@
 
 <p><strong>2020-12-10</strong></p>
 
-<p><h1 id='general-info'>General Info</h1><h2 id='general-api-information'>General API Information</h2>
+<h1 id='general-info'>General Info</h1><h2 id='general-api-information'>General API Information</h2>
 <ul>
 <li>The base endpoint is: https://publicapi.synchrobit.io</li>
 <li>All endpoints return either a JSON object or array.</li>
@@ -369,35 +398,63 @@
 <li>HTTP <code>418</code> return code is used when an IP has been auto-banned for continuing to send requests after receiving 429 codes.</li>
 <li>HTTP <code>5XX</code> return codes are used for internal errors; the issue is on Binance&#39;s side. It is important to <strong>NOT</strong> treat this as a failure operation; the execution status is <strong>UNKNOWN</strong> and could have been a success.</li>
 <li>Any endpoint can return an ERROR.</li>
+<li>Specific error codes and messages defined in  Error Codes.</li>
 <li>For <code>GET</code> endpoints, parameters must be sent as a query string.</li>
 <li>For <code>POST</code>, <code>PUT</code>, and <code>DELETE</code> endpoints, the parameters may be sent as <code>a query string</code> or in the <code>request body</code> with content type <code>application/x-www-form-urlencoded</code>. You may mix parameters between both the query string and request body if you wish to do so.</li>
 <li>Parameters may be sent in any order.</li>
 <li>If a parameter sent in both the query string and request body, the query string parameter will be used.</li>
-</ul></p>
+</ul>
+<h2 id='endpoint-security-type'>Endpoint Security Type</h2>
+<ul>
+<li>Each endpoint has a security type that determines the how you will interact with it.</li>
+<li>API-keys and secret-keys <strong>are case sensitive</strong>.</li>
+<li>API-keys can be configured to only access certain types of secure endpoints. For example, one API-key could be used for TRADE only, while another API-key can access everything except for TRADE routes.</li>
+<li>By default, API-keys can access all secure routes.</li>
+</ul>
 
-<p><h1 id='currency'>Currency</h1><h2 id='get-available-currencies'>Get Available Currencies</h2>
+<table><thead>
+<tr>
+<th>Security Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>NONE</td>
+<td>Endpoint can be accessed freely.</td>
+</tr>
+<tr>
+<td>WALLET</td>
+<td>Endpoint requires sending a valid API Key.</td>
+</tr>
+<tr>
+<td>DEPOSIT</td>
+<td>Endpoint requires sending a valid API Key.</td>
+</tr>
+</tbody></table>
+
+
+<h1 id='currency'>Currency</h1><h2 id='get-available-currencies'>Get Available Currencies</h2>
 <p>Gets all currencies available on the exchange.</p>
-
-<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getallcurrency&quot;</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getallcurrency"</span><span class="p">);</span>
 <span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
 <span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span></p>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<p><span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getallcurrency&quot;</span></p>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getallcurrency"</span>
 
-<p><span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span></p>
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
 
-<p><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></p>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 
-<p><span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">&#39;</span><span class="s1">request</span><span class="dl">&#39;</span><span class="p">);</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="dl">&#39;</span><span class="s1">method</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">GET</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">url</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getallcurrency</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">headers</span><span class="dl">&#39;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getallcurrency</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
   <span class="p">}</span>
 <span class="p">};</span>
 <span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
@@ -405,23 +462,21 @@
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
-
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">&quot;contentType&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;serializerSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;statusCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4374f76d-3f3d-4c69-989b-1705fcd1863f&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;tokenName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tether&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;erc20&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;currentPrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;initialValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;coinTokenSymbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDT&quot;</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4374f76d-3f3d-4c69-989b-1705fcd1863f"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"tokenName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tether"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"erc20"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"currentPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"initialValue"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"coinTokenSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
@@ -486,26 +541,26 @@
 </tbody></table>
 <h2 id='get-specific-currency'>Get specific currency</h2>
 <p>Get Specific Currency  by passing the name in the url as a parameter</p>
-<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin&quot;</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin"</span><span class="p">);</span>
 <span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
 <span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span></p>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<p><span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin&quot;</span></p>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin"</span>
 
-<p><span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span></p>
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
 
-<p><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></p>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 
-<p><span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">&#39;</span><span class="s1">request</span><span class="dl">&#39;</span><span class="p">);</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="dl">&#39;</span><span class="s1">method</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">GET</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">url</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">headers</span><span class="dl">&#39;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getcurrencybyname?CurrencyName=Bitcoin</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
   <span class="p">}</span>
 <span class="p">};</span>
 <span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
@@ -513,73 +568,71 @@
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
-
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">&quot;contentType&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;serializerSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;statusCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
             </span><span class="p">{</span><span class="w">
-                </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dc545925-aa9c-4bac-9c50-af362ee2f249&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;fullName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;contactNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;coinName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bitcoin&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;coinTokenSymbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BTC&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;coinImages&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;d3f27cb6-088b-4dd8-981e-28908df06c95BTC.png,&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;webUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;twitterUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;bitcoinTalkUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;githubUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;algorithm&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;isMineable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;affiliated&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhhdh&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;specialization&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhhg&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;contractAddress&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hdhdhd&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-31T07:14:20.7328703+00:00&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;modifyAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-31T18:50:00.5811438+00:00&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;modifyBy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;createdBy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin-20180426112658489&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;initialValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6698.87000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;tokenType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;primary&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;fbUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;linkedinUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;steemitUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;redditUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;mediumUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;telegramUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;instagramUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.bitcoin.com&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;maxSupply&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;210000&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;proofType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PoW&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;startDate&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2010-06-01T00:00:00+00:00&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;difficultyAdj&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;50&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;blockRr&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2342&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;blockNo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;16&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;networkHs&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2400&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;currentSupply&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2342443&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;blockReward&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;23424&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bitcoin uses peer-to-peer technology to operate with no central authority or banks; managing transactions and the issuing of bitcoins is carried out collectively by the network. Although other cryptocurrencies have come before, Bitcoin is the first decentralized cryptocurrency - Its reputation has spawned copies and evolution in the space.</span><span class="se">\r\n\r\n</span><span class="s2">With the largest variety of markets and the biggest value - having reached a peak of 18 billion USD - Bitcoin is here to stay. As with any new invention, there can be improvements or flaws in the initial model however the community and a team of dedicated developers are pushing to overcome any obstacle they come across. It is also the most traded cryptocurrency and one of the main entry points for all the other cryptocurrencies. The price is as unstable as always and it can go up or down by 10%-20% in a single day.</span><span class="se">\r\n\r\n</span><span class="s2">Bitcoin is an SHA-256 POW coin with almost 21,000,000 total minable coins. The block time is 10 minutes. See below for a full range of Bitcoin markets where you can trade US Dollars for Bitcoin, crypto to Bitcoin and many other fiat currencies too.&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;tokenStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Enabled&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;currentPrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">19831.78000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;directVol24hr&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;marketCap&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;totalVol24hr&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;lastTradePrice&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;lastTradeTime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0001-01-01T00:00:00+00:00&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;lastTradeCoin&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;allWalletStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;abi&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fbcvhbbfd&quot;</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;minimumConfirmation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;decimals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;isIEOToken&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;isFiat&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="nl">&quot;coinDescription&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dc545925-aa9c-4bac-9c50-af362ee2f249"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"fullName"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"contactNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"coinName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bitcoin"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"coinTokenSymbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"coinImages"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d3f27cb6-088b-4dd8-981e-28908df06c95BTC.png,"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"webUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"twitterUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"bitcoinTalkUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"githubUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"algorithm"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"isMineable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"affiliated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dhhdh"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"specialization"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dhhg"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"contractAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hdhdhd"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-31T07:14:20.7328703+00:00"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"modifyAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-31T18:50:00.5811438+00:00"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"modifyBy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Admin"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"createdBy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Admin-20180426112658489"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"initialValue"</span><span class="p">:</span><span class="w"> </span><span class="mf">6698.87000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"tokenType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"primary"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"fbUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"linkedinUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"steemitUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"redditUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"mediumUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"telegramUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"instagramUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.bitcoin.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maxSupply"</span><span class="p">:</span><span class="w"> </span><span class="s2">"210000"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"proofType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PoW"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2010-06-01T00:00:00+00:00"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"difficultyAdj"</span><span class="p">:</span><span class="w"> </span><span class="s2">"50"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"blockRr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2342"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"blockNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"networkHs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2400"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"currentSupply"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2342443"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"blockReward"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23424"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bitcoin uses peer-to-peer technology to operate with no central authority or banks; managing transactions and the issuing of bitcoins is carried out collectively by the network. Although other cryptocurrencies have come before, Bitcoin is the first decentralized cryptocurrency - Its reputation has spawned copies and evolution in the space.</span><span class="se">\r\n\r\n</span><span class="s2">With the largest variety of markets and the biggest value - having reached a peak of 18 billion USD - Bitcoin is here to stay. As with any new invention, there can be improvements or flaws in the initial model however the community and a team of dedicated developers are pushing to overcome any obstacle they come across. It is also the most traded cryptocurrency and one of the main entry points for all the other cryptocurrencies. The price is as unstable as always and it can go up or down by 10%-20% in a single day.</span><span class="se">\r\n\r\n</span><span class="s2">Bitcoin is an SHA-256 POW coin with almost 21,000,000 total minable coins. The block time is 10 minutes. See below for a full range of Bitcoin markets where you can trade US Dollars for Bitcoin, crypto to Bitcoin and many other fiat currencies too."</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"tokenStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"currentPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">19831.78000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"directVol24hr"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"marketCap"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"totalVol24hr"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"lastTradePrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"lastTradeTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00+00:00"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"lastTradeCoin"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"allWalletStatus"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"abi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fbcvhbbfd"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"minimumConfirmation"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"decimals"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"isIEOToken"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"isFiat"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"coinDescription"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
@@ -785,34 +838,35 @@
 <td>int</td>
 <td>Number of orders of the Coin</td>
 </tr>
-</tbody></table></p>
+</tbody></table>
 
-<p><h1 id='wallet'>Wallet</h1><h2 id='wallet-balance'>Wallet Balance</h2>
+
+<h1 id='wallet'>Wallet</h1><h2 id='wallet-balance'>Wallet Balance</h2>
 <p>Get the wallet balance by passing the wallet code as a parameter in the Query string.</p>
-<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP&quot;</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP"</span><span class="p">);</span>
 <span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">&quot;userkey&quot;</span><span class="p">,</span> <span class="s">&quot;52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&quot;</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
 <span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span></p>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<p><span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP&quot;</span></p>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP"</span>
 
-<p><span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s">&#39;userkey&#39;</span><span class="p">:</span> <span class="s">&#39;52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&#39;</span>
-<span class="p">}</span></p>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span>
+<span class="p">}</span>
 
-<p><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></p>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 
-<p><span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">&#39;</span><span class="s1">request</span><span class="dl">&#39;</span><span class="p">);</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="dl">&#39;</span><span class="s1">method</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">GET</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">url</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP</span><span class="dl">&#39;</span><span class="p">,</span>
-  <span class="dl">&#39;</span><span class="s1">headers</span><span class="dl">&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">&#39;</span><span class="s1">userkey</span><span class="dl">&#39;</span><span class="p">:</span> <span class="dl">&#39;</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">&#39;</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/walletbalance?WalletCode=XRP</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span>
   <span class="p">}</span>
 <span class="p">};</span>
 <span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
@@ -820,16 +874,14 @@
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
-
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">&quot;contentType&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;serializerSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;statusCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;68.99335900&quot;</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"68.99335900"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='request-information'>Request Information</h3>
 <table><thead>
@@ -849,7 +901,7 @@
 </tbody></table>
 <h3 id='headers'>Headers</h3>
 <p>ApiKey:
- Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p></p>
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
 
 <table><thead>
 <tr>
@@ -862,9 +914,7 @@
 <td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
 </tr>
 </tbody></table>
-
 <h3 id='query-parameters'>Query Parameters</h3>
-
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -880,9 +930,7 @@
 <td>wallet code types</td>
 </tr>
 </tbody></table>
-
 <h3 id='output-schema-of-request'>Output Schema of Request</h3>
-
 <table><thead>
 <tr>
 <th>Field</th>
@@ -896,11 +944,8 @@
 <td>Available balance of the corresponding input Wallet Code</td>
 </tr>
 </tbody></table>
-
 <h2 id='get-ledger-entries'>Get Ledger Entries</h2>
-
 <p>Get all the Ledger Entries list.</p>
-
 <div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getledgersentries"</span><span class="p">);</span>
 <span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
@@ -933,11 +978,9 @@ request(options, function (error, response) {
   console.log(response.body);
 });
 </span></code></pre></div>
-
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
@@ -956,7 +999,23 @@ request(options, function (error, response) {
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='headers-2'>Headers</h3>
+</span></code></pre></div><h3 id='request-information-2'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Get</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getledgersentries</td>
+</tr>
+</tbody></table>
+<h3 id='headers-2'>Headers</h3>
 <p>ApiKey:
  Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
 
@@ -1062,26 +1121,24 @@ request(options, function (error, response) {
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
-
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-
-<p><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">&quot;contentType&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;serializerSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;statusCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Synchrobit-exchangeOGfbQAf2EY6LXnVjXCDXMioWwLw5RZnZKihDQVPvsBUBihJ2mhdaUtUG9OhQ3&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;txFee&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;txHash&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a6895f311a9d38e2d5f6f5f387a73f7cf40960b030296ee5726e7798fb8a4b82&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;walletAddress&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yfkmTmnsJwKC2939jKQrU4GvMhNUEb42Hp&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;walletCode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DASH&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;transactionDetails&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DASHReceived&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;creditAmount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">500.00000000000</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-11-09T05:00:03.0633333+00:00&quot;</span><span class="p">,</span><span class="w">
-            </span><span class="nl">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Completed&quot;</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Synchrobit-exchangeOGfbQAf2EY6LXnVjXCDXMioWwLw5RZnZKihDQVPvsBUBihJ2mhdaUtUG9OhQ3"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"txFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"txHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a6895f311a9d38e2d5f6f5f387a73f7cf40960b030296ee5726e7798fb8a4b82"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"walletAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yfkmTmnsJwKC2939jKQrU4GvMhNUEb42Hp"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"walletCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DASH"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"transactionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DASHReceived"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"creditAmount"</span><span class="p">:</span><span class="w"> </span><span class="mf">500.00000000000</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-11-09T05:00:03.0633333+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Completed"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1103,7 +1160,7 @@ request(options, function (error, response) {
 </tbody></table>
 <h3 id='headers'>Headers</h3>
 <p>ApiKey:
- Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p></p>
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
 
 <table><thead>
 <tr>
@@ -1116,13 +1173,9 @@ request(options, function (error, response) {
 <td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
 </tr>
 </tbody></table>
-
 <h3 id='query-parameters'>Query Parameters</h3>
-
 <p>No Query Parameters</p>
-
 <h3 id='output-schema-of-request'>Output Schema of Request</h3>
-
 <table><thead>
 <tr>
 <th>Field</th>
@@ -1174,6 +1227,963 @@ request(options, function (error, response) {
 <td>status</td>
 <td>string</td>
 <td>Status of the transaction of Deposit</td>
+</tr>
+</tbody></table>
+<h2 id='get-all-generic-deposit-by-wallet-code'>Get All Generic Deposit by Wallet Code</h2>
+<ul>
+<li> Get all the Generic Deposit list on the basis of wallet Code by just  passing the wallet code as a parameter in the Query string.</li>
+<li>We will get only the list of  Generic Deposit which will match the wallet code</li>
+</ul>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getgenericdepositebywalletcode?Walletcode=SNB"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getgenericdepositebywalletcode?Walletcode=SNB"</span>
+
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getgenericdepositebywalletcode?Walletcode=SNB</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Synchrobit-exchangeNVxETeRGIWnInVyhLsvwtvhg/hSnl7cBK4s8Izg0pK2lDCAIwabEY8zjwTXzw"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"txFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"txHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"790496447"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"walletAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0068b6Ccade2b306b2F32FDB2d9643DE241x360002"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"walletCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SNB"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"transactionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SNB Receive from 790496447"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"creditAmount"</span><span class="p">:</span><span class="w"> </span><span class="mf">45.588236</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-11T11:32:07.247469+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Completed"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information-2'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Get</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getgenericdepositebywalletcode?Walletcode=SNB</td>
+</tr>
+</tbody></table>
+<h3 id='headers-2'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>WalletCode</td>
+<td>string</td>
+<td>Wallet code types</td>
+<td>XRP,ETH,BTC etc Type name</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request-2'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Id of the Generic Deposit generated after deposit</td>
+</tr>
+<tr>
+<td>txFee</td>
+<td>decimal</td>
+<td>txFee of the deposit</td>
+</tr>
+<tr>
+<td>txHash</td>
+<td>string</td>
+<td>Hash of the transaction Deposited</td>
+</tr>
+<tr>
+<td>walletAddress</td>
+<td>string</td>
+<td>Wallet address of the User who deposited</td>
+</tr>
+<tr>
+<td>walletCode</td>
+<td>string</td>
+<td>Wallet code of the deposited</td>
+</tr>
+<tr>
+<td>transactionDetails</td>
+<td>string</td>
+<td>Transaction Details of Deposit</td>
+</tr>
+<tr>
+<td>creditAmount</td>
+<td>decimal</td>
+<td>The amount of currency Deposited</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>DateTime</td>
+<td>The time when transaction happen</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Status of the transaction of Deposit</td>
+</tr>
+</tbody></table>
+
+
+<h1 id='order'>Order</h1><h2 id='place-a-new-order'>Place a New Order</h2>
+<p>Creates a new order on the exchange.</p>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/placeorder"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">,</span> <span class="s">"{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n  \"isPrivate\": false\r\n}"</span><span class="p">,</span>  <span class="n">ParameterType</span><span class="p">.</span><span class="n">RequestBody</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/placeorder"</span>
+
+<span class="n">payload</span><span class="o">=</span><span class="s">"{</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">orderPrice</span><span class="se">\"</span><span class="s">: 9080.01,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">marketOrderPrice</span><span class="se">\"</span><span class="s">: 9080.01,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">stopQuantity</span><span class="se">\"</span><span class="s">: 0,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">limitQuantity</span><span class="se">\"</span><span class="s">: 0,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">coinPair</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">BTC/USDT</span><span class="se">\"</span><span class="s">,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">quantity</span><span class="se">\"</span><span class="s">: 1,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">orderType</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">Limit</span><span class="se">\"</span><span class="s">,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">orderAction</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">Sell</span><span class="se">\"</span><span class="s">,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">isPrivate</span><span class="se">\"</span><span class="s">: false</span><span class="se">\r\n</span><span class="s">}"</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span><span class="p">,</span>
+  <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/placeorder</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+  <span class="p">},</span>
+  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="dl">"</span><span class="s2">orderPrice</span><span class="dl">"</span><span class="p">:</span><span class="mf">9080.01</span><span class="p">,</span><span class="dl">"</span><span class="s2">marketOrderPrice</span><span class="dl">"</span><span class="p">:</span><span class="mf">9080.01</span><span class="p">,</span><span class="dl">"</span><span class="s2">stopQuantity</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="dl">"</span><span class="s2">limitQuantity</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="dl">"</span><span class="s2">coinPair</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC/USDT</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">quantity</span><span class="dl">"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="dl">"</span><span class="s2">orderType</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Limit</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">orderAction</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Sell</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">isPrivate</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">})</span>
+
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Submitted exchange Limit Sell order for 1.00000000 BTC by using USDT"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Post</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/placeorder</td>
+</tr>
+</tbody></table>
+<h3 id='headers'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='input-schema-for-request'>Input Schema for Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderPrice</td>
+<td>decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>marketOrderPrice</td>
+<td>decimal</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>stopQuantity</td>
+<td>int</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>limitQuantity</td>
+<td>int</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>coinPair</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>int</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>orderType</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>orderAction</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>isPrivate</td>
+<td>bool</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>Successful message for the Place Order</td>
+</tr>
+</tbody></table>
+<h2 id='get-order-history'>Get Order History</h2><div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getorderhistory"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getorderhistory"</span>
+
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getorderhistory</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"429bc6ab-76e3-4bab-b6ba-6701c2c18612"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"coinPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC/USDT"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderAction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sell"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Limit"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.85536976</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.010601</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-24T09:50:43.4166667+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cancelled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information-2'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Get</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getorderhistory</td>
+</tr>
+</tbody></table>
+<h3 id='headers-2'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request-2'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderId</td>
+<td>string</td>
+<td>Id of the  Order</td>
+</tr>
+<tr>
+<td>coinPair</td>
+<td>string</td>
+<td>Name of the Type of CoinPair</td>
+</tr>
+<tr>
+<td>orderAction</td>
+<td>string</td>
+<td>Order Action Sell/Buy</td>
+</tr>
+<tr>
+<td>orderType</td>
+<td>string</td>
+<td>Type of the Order</td>
+</tr>
+<tr>
+<td>orderPrice</td>
+<td>decimal</td>
+<td>Order Price</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>decimal</td>
+<td>Quantity of the Order</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>DateTime</td>
+<td>Date of the Order when ordered</td>
+</tr>
+<tr>
+<td>fillId</td>
+<td>string</td>
+<td>fillId</td>
+</tr>
+<tr>
+<td>orderStatus</td>
+<td>string</td>
+<td>Status of the Order(Pending,failed and all)</td>
+</tr>
+</tbody></table>
+<h2 id='get-pending-orders'>Get Pending Orders</h2>
+<p>Get All the pending Orders in a list.</p>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getpendingorders"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">,</span> <span class="s">"{\r\n  \"apIkey\": \"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3\",\r\n  \"coinPair\": \"BTC/USDT\"\r\n}"</span><span class="p">,</span>  <span class="n">ParameterType</span><span class="p">.</span><span class="n">RequestBody</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getpendingorders"</span>
+
+<span class="n">payload</span><span class="o">=</span><span class="s">"{</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">apIkey</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="se">\"</span><span class="s">,</span><span class="se">\r\n</span><span class="s">  </span><span class="se">\"</span><span class="s">coinPair</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">BTC/USDT</span><span class="se">\"\r\n</span><span class="s">}"</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span><span class="p">,</span>
+  <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getpendingorders</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+  <span class="p">},</span>
+  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="dl">"</span><span class="s2">apIkey</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">coinPair</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC/USDT</span><span class="dl">"</span><span class="p">})</span>
+
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"429bc6ab-76e3-4bab-b6ba-6701c2c18612"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"coinPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC/USDT"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderAction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sell"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Limit"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.85536976</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.010601</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-24T09:50:43.4166667+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cancelled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information-3'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Post</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getpendingorders</td>
+</tr>
+</tbody></table>
+<h3 id='headers-3'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='input-schema-for-request-2'>Input Schema for Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>apIkey</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>coinPair</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request-3'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderId</td>
+<td>string</td>
+<td>Id of the order</td>
+</tr>
+<tr>
+<td>coinPair</td>
+<td>string</td>
+<td>Code of the coin pair</td>
+</tr>
+<tr>
+<td>orderAction</td>
+<td>string</td>
+<td>Action of the order(sell/buy)</td>
+</tr>
+<tr>
+<td>orderType</td>
+<td>string</td>
+<td>Type of the order</td>
+</tr>
+<tr>
+<td>orderPrice</td>
+<td>decimal</td>
+<td>Price of the Order</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>decimal</td>
+<td>Quantity of the order</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>DateTime</td>
+<td>The time when transaction happen</td>
+</tr>
+<tr>
+<td>fillId</td>
+<td>string</td>
+<td>fillId</td>
+</tr>
+<tr>
+<td>orderStatus</td>
+<td>string</td>
+<td>Status of the transaction</td>
+</tr>
+</tbody></table>
+<h2 id='cancel-order'>Cancel Order</h2>
+<p>Send a request to cancel an open order.</p>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&amp;OrderId=6c834073-5123-4758-9b76-9ba079b285d5"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&amp;OrderId=6c834073-5123-4758-9b76-9ba079b285d5'
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("</span><span class="n">POST</span><span class="s">", url, headers=headers, data=payload)
+
+print(response.text)
+
+</span></code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&amp;OrderId=6c834073-5123-4758-9b76-9ba079b285d5</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Order Cancelled Successfully"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information-4'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Post</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&amp;OrderId=6c834073-5123-4758-9b76-9ba079b285d5</td>
+</tr>
+</tbody></table>
+<h3 id='headers-4'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Mandatory</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>apIkey</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>OrderId</td>
+<td>string</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request-4'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>Success message of Cancel Order</td>
+</tr>
+</tbody></table>
+<h2 id='get-order-history-by-order-action'>Get Order History by Order Action</h2>
+<ul>
+<li>Get the Order History on the basis of  Order Action value as a parameter in the string.</li>
+<li>It will list all the existing Order by matching the value of Order Action.</li>
+</ul>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"userkey"</span><span class="p">,</span> <span class="s">"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3"</span><span class="p">);</span>
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy"</span>
+
+<span class="n">payload</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'userkey'</span><span class="p">:</span> <span class="s">'52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">request</span><span class="dl">'</span><span class="p">);</span>
+ <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
+   <span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy</span><span class="dl">'</span><span class="p">,</span>
+   <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+     <span class="dl">'</span><span class="s1">userkey</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</span><span class="dl">'</span>
+   <span class="p">}</span>
+ <span class="p">};</span>
+ <span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+ <span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"contentType"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serializerSettings"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-23T05:00:44.4533333+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"coinPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH/BTC"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Limit"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderAction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Buy"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"orderPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.025108</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">82</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"stopLimit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"limitQuantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Filled"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"processedPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.024941</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"processedQuantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">81</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.020221</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"isGreaterTrigger"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+   </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-information-5'>Request Information</h3>
+<table><thead>
+<tr>
+<th>Category</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Http Request</td>
+<td><code>Get</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td>https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy</td>
+</tr>
+</tbody></table>
+<h3 id='headers-5'>Headers</h3>
+<p>ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userkey</td>
+<td>52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3</td>
+</tr>
+</tbody></table>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Mandatory</th>
+<th>Example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>OrderAction</td>
+<td>string</td>
+<td>Yes</td>
+<td>Buy/sell</td>
+</tr>
+</tbody></table>
+<h3 id='output-schema-of-request-5'>Output Schema of Request</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>createdAt</td>
+<td>DateTime</td>
+<td>Ordered date of the Order</td>
+</tr>
+<tr>
+<td>coinPair</td>
+<td>string</td>
+<td>Name of the Type of CoinPair</td>
+</tr>
+<tr>
+<td>orderAction</td>
+<td>string</td>
+<td>Order Action Sell/Buy</td>
+</tr>
+<tr>
+<td>orderType</td>
+<td>string</td>
+<td>Type of the Order</td>
+</tr>
+<tr>
+<td>orderPrice</td>
+<td>decimal</td>
+<td>Order Price</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>int</td>
+<td>Quantity of the Order</td>
+</tr>
+<tr>
+<td>stopLimit</td>
+<td>int</td>
+<td>Limit after which it will stop making order</td>
+</tr>
+<tr>
+<td>limitQuantity</td>
+<td>int</td>
+<td>Limitation of Order Quantity</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Status of the Order</td>
+</tr>
+<tr>
+<td>processedPrice</td>
+<td>decimal</td>
+<td>Processed Price of the Order</td>
+</tr>
+<tr>
+<td>processedQuantity</td>
+<td>int</td>
+<td>Processed Quantity of the Order</td>
+</tr>
+<tr>
+<td>total</td>
+<td>decimal</td>
+<td>Total amount</td>
+</tr>
+<tr>
+<td>isGreaterTrigger</td>
+<td>bool</td>
+<td>isGreaterTrigger check</td>
+</tr>
+</tbody></table>
+
+
+<h1 id='error-codes'>Error Codes</h1>
+
+<p>Errors consist of two parts: an error code and a message.
+Codes are universal,but messages can vary.</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request is invalid.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is wrong.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- The API requested is hidden for administrators only.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The specified request could not be found.</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed -- You tried to access a request with an invalid method.</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone -- The API requested has been removed from our servers.</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&#39;m a teapot.</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests -- You&#39;re requesting too many requests! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
 </tr>
 </tbody></table>
 
