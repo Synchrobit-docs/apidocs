@@ -1,0 +1,516 @@
+# Order
+
+## Place a New Order
+
+Creates a new order on the exchange.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/placeorder");
+client.Timeout = -1;
+var request = new RestRequest(Method.POST);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+request.AddHeader("Content-Type", "application/json");
+request.AddParameter("application/json", "{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n  \"isPrivate\": false\r\n}",  ParameterType.RequestBody);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/placeorder"
+
+payload="{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n  \"isPrivate\": false\r\n}"
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/placeorder',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({"orderPrice":9080.01,"marketOrderPrice":9080.01,"stopQuantity":0,"limitQuantity":0,"coinPair":"BTC/USDT","quantity":1,"orderType":"Limit","orderAction":"Sell","isPrivate":false})
+
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": "Submitted exchange Limit Sell order for 1.00000000 BTC by using USDT"
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Post`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/placeorder|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+### Input Schema for Request
+|Field|Type|Mandatory|
+|-----------|-------|---------|
+|orderPrice|decimal | Yes |
+|marketOrderPrice|decimal | Yes|
+|stopQuantity | int| Yes|
+|limitQuantity| int|Yes|
+|coinPair|string |Yes|
+|quantity|int | Yes |
+|orderType|string | Yes  |
+|orderAction|string | Yes |
+|isPrivate|bool | Yes |
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|value|string |Successful message for the Place Order  |
+
+
+
+
+
+## Get Order History
+
+
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getorderhistory");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getorderhistory"
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getorderhistory',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "orderId": "429bc6ab-76e3-4bab-b6ba-6701c2c18612",
+            "coinPair": "BTC/USDT",
+            "orderAction": "Sell",
+            "orderType": "Limit",
+            "orderPrice": 100.85536976,
+            "quantity": 0.010601,
+            "createdAt": "2020-06-24T09:50:43.4166667+00:00",
+            "fillId": null,
+            "orderStatus": "Cancelled"
+        }
+    ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getorderhistory|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|orderId|string |Id of the  Order |
+|coinPair|string |Name of the Type of CoinPair|
+|orderAction | string|Order Action Sell/Buy |
+|orderType| string|Type of the Order|
+|orderPrice|decimal |Order Price  |
+|quantity|decimal | Quantity of the Order|
+|createdAt|DateTime |Date of the Order when ordered  |
+|fillId |string |fillId |
+|orderStatus| string|Status of the Order(Pending,failed and all) |
+
+
+
+## Get Pending Orders
+
+Get All the pending Orders in a list.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getpendingorders");
+client.Timeout = -1;
+var request = new RestRequest(Method.POST);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+request.AddHeader("Content-Type", "application/json");
+request.AddParameter("application/json", "{\r\n  \"apIkey\": \"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3\",\r\n  \"coinPair\": \"BTC/USDT\"\r\n}",  ParameterType.RequestBody);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getpendingorders"
+
+payload="{\r\n  \"apIkey\": \"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3\",\r\n  \"coinPair\": \"BTC/USDT\"\r\n}"
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getpendingorders',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({"apIkey":"52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3","coinPair":"BTC/USDT"})
+
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "orderId": "429bc6ab-76e3-4bab-b6ba-6701c2c18612",
+            "coinPair": "BTC/USDT",
+            "orderAction": "Sell",
+            "orderType": "Limit",
+            "orderPrice": 100.85536976,
+            "quantity": 0.010601,
+            "createdAt": "2020-06-24T09:50:43.4166667+00:00",
+            "fillId": null,
+            "orderStatus": "Cancelled"
+        }
+    ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Post`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getpendingorders|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+### Input Schema for Request
+|Field|Type|Mandatory|
+|-----------|-------|---------|
+|apIkey|string | Yes |
+|coinPair|string | Yes|
+
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|orderId|string |Id of the order |
+|coinPair|string |Code of the coin pair |
+|orderAction | string|Action of the order(sell/buy) |
+|orderType| string|Type of the order|
+|orderPrice|decimal |Price of the Order|
+|quantity|decimal | Quantity of the order|
+|createdAt|DateTime |The time when transaction happen  |
+|fillId |string |fillId|
+|orderStatus| string|Status of the transaction |
+
+
+## Cancel Order
+
+Send a request to cancel an open order.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&OrderId=6c834073-5123-4758-9b76-9ba079b285d5");
+client.Timeout = -1;
+var request = new RestRequest(Method.POST);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&OrderId=6c834073-5123-4758-9b76-9ba079b285d5'
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&OrderId=6c834073-5123-4758-9b76-9ba079b285d5',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": "Order Cancelled Successfully"
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Post`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/cancelorder?Apikey=52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3&OrderId=6c834073-5123-4758-9b76-9ba079b285d5|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+
+
+### Query Parameters
+
+Parameter | Type |Mandatory |
+|-----------|-------|---------|
+|apIkey|string | Yes |
+|OrderId|string | Yes|
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|value|string |Success message of Cancel Order|
+
+
+
+## Get Order History by Order Action
+
+ - Get the Order History on the basis of  Order Action value as a parameter in the string.
+ - It will list all the existing Order by matching the value of Order Action.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy"
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+ var options = {
+   'method': 'GET',
+   'url': 'https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy',
+   'headers': {
+     'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+   }
+ };
+ request(options, function (error, response) {
+   if (error) throw new Error(error);
+   console.log(response.body);
+ });
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "createdAt": "2020-06-23T05:00:44.4533333+00:00",
+            "coinPair": "ETH/BTC",
+            "orderType": "Limit",
+            "orderAction": "Buy",
+            "orderPrice": 0.025108,
+            "quantity": 82,
+            "stopLimit": 0,
+            "limitQuantity": 0,
+            "status": "Filled",
+            "processedPrice": 0.024941,
+            "processedQuantity": 81,
+            "total": 2.020221,
+            "isGreaterTrigger": false
+        }
+   ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getorderhistorybyorderaction?OrderAction=Buy|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+
+
+### Query Parameters
+
+Parameter | Type |Mandatory |Example|
+|-----------|-------|---------|------|
+|OrderAction|string | Yes |Buy/sell|
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|createdAt|DateTime |Ordered date of the Order |
+|coinPair| string|Name of the Type of CoinPair|
+|orderAction|string |Order Action Sell/Buy |
+|orderType|string |Type of the Order|
+|orderPrice| decimal |Order Price  |
+|quantity| int|Quantity of the Order|
+|stopLimit|int |Limit after which it will stop making order|
+|limitQuantity | int|Limitation of Order Quantity |
+|status| string|Status of the Order |
+|processedPrice|decimal |Processed Price of the Order|
+|processedQuantity| int|Processed Quantity of the Order |
+|total| decimal|Total amount|
+|isGreaterTrigger|bool |isGreaterTrigger check |
+
+
+
+
+
+
