@@ -1,0 +1,593 @@
+# Trade
+
+## Get Trade
+
+Get available trades by using the Order Id as a parameter in the Query string.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/gettrade?OrderId=156ffdee-21d4-4eb7-fe18-sdw45st4662f");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/gettrade?OrderId=156ffdee-21d4-4eb7-fe18-sdw45st4662f"
+
+payload={}
+headers = {
+  'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/gettrade?OrderId=156ffdee-21d4-4eb7-fe18-sdw45st4662f',
+  'headers': {
+    'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": {
+        "orderId": "156ffdee-21d4-4eb7-fe18-sdw45st4662f",
+        "coinPair": "ETH/BTC",
+        "orderAction": "Sell",
+        "orderType": "Limit",
+        "createdAt": "2020-06-23T05:04:18.5333333+00:00",
+        "processedQuantity": 82.341,
+        "processedPrice": 0.024128,
+        "total": 1.986723648
+    }
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/gettrade?OrderId=156ffdee-21d4-4eb7-fe18-sdw45st4662f|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3|
+
+
+### Query Parameters
+
+Parameter | Type |Mandatory |Description|
+|-----------|-------|---------|---------|
+|OrderId|string | Yes|OrderId of Trade Order |
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|orderId|string |Id of the  Order |
+|coinPair|string |Name of the Type of CoinPair|
+|orderAction | string|Order Action Sell/Buy |
+|orderType| string|Type of the Order|
+|createdAt|DateTime |Date of the Order when ordered|
+|processedQuantity|decimal | Processed Quantity|
+|processedPrice|decimal |Processed Price|
+|total |decimal |total |
+
+
+
+
+
+
+## Get Trade Order
+Get trade Order by passing the Order Id as a parameter in the string.
+
+
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/gettradeorder?OrderId=3fdhdde0c-41ef-4d9a-b0b5-as4fhr5gh3090");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/gettradeorder?OrderId=3fdhdde0c-41ef-4d9a-b0b5-as4fhr5gh3090"
+
+payload={}
+headers = {
+  'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/gettradeorder?OrderId=3fdhdde0c-41ef-4d9a-b0b5-as4fhr5gh3090',
+  'headers': {
+    'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": {
+        "orderType": "Limit",
+        "orderAction": "Buy",
+        "orderStatus": "Filled",
+        "createdAt": "2020-06-23T05:00:44.4533333+00:00",
+        "coinPair": "ETH/BTC",
+        "processedQuantity": 81,
+        "processedPrice": 0.024941,
+        "total": 2.020221,
+        "txFee": 0.0738,
+        "usdPrice": 19448.000894,
+        "feeWallet": "ETH"
+    }
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/gettradeorder?OrderId=3fdhdde0c-41ef-4d9a-b0b5-as4fhr5gh3090|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3|
+
+### Query Parameters
+
+Parameter | Type |Mandatory |Description|
+|-----------|-------|---------|---------|
+|OrderId|string | Yes|OrderId of Trade Order|
+
+
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|orderType|string |Type of the Order|
+|orderAction|string |Order Action Sell/Buy|
+|orderStatus | string|Order status|
+|createdAt| DateTime|Date of the Order when ordered|
+|coinPair|decimal |Type of the CoinPair|
+|processedQuantity|int | Processed Quantity to be ordered|
+|processedPrice|decimal |Processed Price|
+|total |decimal |total |
+|txFee| decimal|transaction fees |
+|usdPrice| decimal|Usd Price |
+|feeWallet| string|FeeWallet code |
+
+
+
+## Get Trade History
+Get all the available trades history list.
+
+
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/gettradehistory");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+request.AddHeader("userkey", "10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3");
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/gettradehistory"
+
+payload={}
+headers = {
+  'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/gettradehistory',
+  'headers': {
+    'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "orderId": "156bcfbe-21d4-4eb7-be18-c2fcb6a3f1dc",
+            "orderType": "Limit",
+            "orderAction": "Sell",
+            "orderStatus": "Filled",
+            "createdAt": "2020-06-23T05:04:18.5333333+00:00",
+            "coinPair": "ETH/BTC",
+            "processedQuantity": 82.341,
+            "processedPrice": 0.024128,
+            "total": 1.986723648,
+            "txFee": 61.2143767,
+            "usdPrice": 19125.53294,
+            "feeWallet": "SNB"
+        }
+    ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/gettradehistory|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3|
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|orderId|string |Id of the Order|
+|orderType|string |Type of the Order|
+|orderAction| string|Order Action Sell/Buy|
+|orderStatus| string|Order status|
+|createdAt|DateTime |Date of the Order when ordered|
+|coinPair|decimal | Type of the CoinPair|
+|processedQuantity|int |Processed Quantity to be ordered|
+|processedPrice |decimal |Processed Price |
+|total| decimal|total |
+|txFee| decimal|transaction fees|
+|usdPrice| decimal|Usd Price|
+|feeWallet| string|FeeWallet code |
+
+
+## Get Trading Pair
+Get all the existing trading pair.
+
+
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/gettradingpair");
+client.Timeout = -1;
+var request = new RestRequest(Method.GET);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/gettradingpair"
+
+payload={}
+headers = {}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'GET',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/gettradingpair',
+  'headers': {
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": [
+        {
+            "coinPairId": "6df33b56-f54c-45d3-a7b6-ca3a914774bb",
+            "coinPair": "BCH/BTC",
+            "primaryCoin": "BCH",
+            "secondaryCoin": "BTC",
+            "tradingPrice": 0.024791,
+            "usdPrice": 0.0278,
+            "high24Hr": 0.024827,
+            "low24Hr": 0.024757
+        }
+    ]
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Get`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/gettradingpair
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|coinPairId|string |Id of the Coin Pair|
+|coinPair|string |Coin Pair Type name |
+|primaryCoin| string|Primary Coin Type Name|
+|secondaryCoin| string|Secondary Coin Type Name|
+|tradingPrice|decimal |Price of trading|
+|usdPrice|decimal | Usd Price |
+|high24Hr|decimal |High 25 hour value|
+|low24Hr |decimal |low 24 hour value|
+
+
+
+
+## Get Sell Trade Volume
+
+Get all the sell trade volume list by passing the parameters, key and coinPair as a body.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getselltradevolume");
+client.Timeout = -1;
+var request = new RestRequest(Method.POST);
+request.AddHeader("userkey", "10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3");
+request.AddHeader("Content-Type", "application/json");
+request.AddParameter("application/json", "{\r\n  \"apIkey\": \"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3\",\r\n  \"coinPair\": \"ETH/BTC\"\r\n}",  ParameterType.RequestBody);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getselltradevolume"
+
+payload="{\r\n  \"apIkey\": \"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3\",\r\n  \"coinPair\": \"ETH/BTC\"\r\n}"
+headers = {
+  'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getselltradevolume',
+  'headers': {
+    'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({"apIkey":"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3","coinPair":"ETH/BTC"})
+
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": {
+        "coin_Pair": "ETH/BTC",
+        "usd_Price": 841859.456862
+    }
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Post`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getselltradevolume|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3|
+
+
+### Input Schema for Request
+|Field|Type|Mandatory|
+|-----------|-------|---------|
+|apIkey|string | Yes |
+|coinPair|string | Yes|
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|coinPair|string |Code of the coin pair |
+|usdPrice | decimal|Usd Price |
+
+
+
+## Get Buy Trade Volume
+
+Get all the Buy Trade Volume by passing the parameter, api key and coinPair as a body.
+
+```csharp
+var client = new RestClient("https://publicapi.synchrobit.io/api/publicapi/getbuytradevolume");
+client.Timeout = -1;
+var request = new RestRequest(Method.POST);
+request.AddHeader("userkey", "10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3");
+request.AddHeader("Content-Type", "application/json");
+request.AddParameter("application/json", "{\r\n  \"apIkey\": \"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3\",\r\n  \"coinPair\": \"ETH/BTC\"\r\n}",  ParameterType.RequestBody);
+IRestResponse response = client.Execute(request);
+Console.WriteLine(response.Content);
+```
+
+```python
+import requests
+
+url = "https://publicapi.synchrobit.io/api/publicapi/getbuytradevolume"
+
+payload="{\r\n  \"apIkey\": \"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3\",\r\n  \"coinPair\": \"ETH/BTC\"\r\n}"
+headers = {
+  'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+```
+
+```javascript
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://publicapi.synchrobit.io/api/publicapi/getbuytradevolume',
+  'headers': {
+    'userkey': '10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({"apIkey":"10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3","coinPair":"ETH/BTC"})
+
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+> The above command returns JSON structured like this:
+
+```json
+{
+    "contentType": null,
+    "serializerSettings": null,
+    "statusCode": null,
+    "value": {
+        "coin_Pair": "ETH/BTC",
+        "usd_Price": 841859.456862
+    }
+}
+```
+
+### Request Information
+|Category|Value|
+|-----------|---------|
+|Http Request |`Post`|
+|URL|https://publicapi.synchrobit.io/api/publicapi/getbuytradevolume|
+
+
+### Headers
+ApiKey:
+ Key can be generated on Synchrobit website, Length of key will be 128 digit alphanumeric string.
+
+|Key|Value|
+|-----------|---------|
+|userkey |10159bb32deb016492f98935966c426ab5b041b034f0130dc61aaca9278cf35c78ffec66e2fe93ee152b68b10e709f446ebbe2692d870a1dfbf03f80d10224d3|
+
+
+### Input Schema for Request
+|Field|Type|Mandatory|
+|-----------|-------|---------|
+|apIkey|string | Yes |
+|coinPair|string | Yes|
+
+
+
+### Output Schema of Request
+|Field|Type|Meaning|
+|-----------|-------|---------|
+|coinPair|string |Code of the coin pair |
+|usdPrice | decimal|Usd Price |
+
+
+
+
+
+
+
