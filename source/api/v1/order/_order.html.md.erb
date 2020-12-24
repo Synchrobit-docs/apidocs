@@ -10,7 +10,7 @@ client.Timeout = -1;
 var request = new RestRequest(Method.POST);
 request.AddHeader("userkey", "52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3");
 request.AddHeader("Content-Type", "application/json");
-request.AddParameter("application/json", "{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n  \"isPrivate\": false\r\n}",  ParameterType.RequestBody);
+request.AddParameter("application/json", "{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n }",  ParameterType.RequestBody);
 IRestResponse response = client.Execute(request);
 Console.WriteLine(response.Content);
 ```
@@ -20,7 +20,7 @@ import requests
 
 url = "https://publicapi.synchrobit.io/api/publicapi/placeorder"
 
-payload="{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n  \"isPrivate\": false\r\n}"
+payload="{\r\n  \"orderPrice\": 9080.01,\r\n  \"marketOrderPrice\": 9080.01,\r\n  \"stopQuantity\": 0,\r\n  \"limitQuantity\": 0,\r\n  \"coinPair\": \"BTC/USDT\",\r\n  \"quantity\": 1,\r\n  \"orderType\": \"Limit\",\r\n  \"orderAction\": \"Sell\",\r\n }"
 headers = {
   'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
   'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ var options = {
     'userkey': '52b68b1649f03f80d102210e709f446ebc61aaca9260159bb32d6c426ab5b03011ebffec66e2b3590d8cf35c784f2f989041be2692d870a1dfb0137fe93ee4d3',
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify({"orderPrice":9080.01,"marketOrderPrice":9080.01,"stopQuantity":0,"limitQuantity":0,"coinPair":"BTC/USDT","quantity":1,"orderType":"Limit","orderAction":"Sell","isPrivate":false})
+  body: JSON.stringify({"orderPrice":9080.01,"marketOrderPrice":9080.01,"stopQuantity":0,"limitQuantity":0,"coinPair":"BTC/USDT","quantity":1,"orderType":"Limit","orderAction":"Sell"})
 
 };
 request(options, function (error, response) {
@@ -86,7 +86,7 @@ ApiKey:
 |quantity|int | Yes |
 |orderType|string | Yes  |
 |orderAction|string | Yes |
-|isPrivate|bool | Yes |
+
 
 
 
